@@ -18,7 +18,8 @@ function init(server) {
 
     let unless = (path, middleware) => {
         return function(req, res, next) {
-            if (path === req.path) {
+            let requestPath = req.path.replace(/\/$/, "")
+            if (path === requestPath) {
                 return next();
             } else {
                 return middleware(req, res, next);
@@ -35,7 +36,7 @@ function init(server) {
         gets called at the router.get('*') level
     */
 
-    server.use(unless('/taxii', apiRoute));  
+    server.use(unless('/taxii', apiRoute));
     server.use('/taxii', discoveryRoute);
 }
 
